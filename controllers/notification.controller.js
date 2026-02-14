@@ -4,7 +4,7 @@ const sendEmail = async (req, res, next) => {
   try {
     const { template_code, user_id, recipient, payload } = req.body;
 
-    console.log("Request body:", req.body);
+    console.log("Request bodys:", req.body);
 
     const notification = await notificationService.createEmailNotification({
       application: req.application,
