@@ -12,4 +12,7 @@ app.use(cors());
 app.use(helmet());
 app.use(morgan("dev"));
 
+const applicationRoutes = require("./Routes/notification.routes");
+app.use("/api/v1", applicationRoutes);
+
 module.exports = app;
