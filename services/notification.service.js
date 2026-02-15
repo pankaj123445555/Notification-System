@@ -1,5 +1,6 @@
 const pool = require("../config/db");
 const templateService = require("../services/template.service");
+const { getChannel } = require("../config/rabbitmq");
 
 exports.createEmailNotification = async ({
   application,
@@ -39,6 +40,20 @@ exports.createEmailNotification = async ({
     );
 
     await client.query("COMMIT");
+
+    const channel = getChannel();
+
+    channel.sendToQueue(
+      "email_queue",
+      Buffer.from(
+        JSON.stringify({
+          notification_id: notification.id,
+          recipient,
+          payload,
+        }),
+      ),
+      { persistent: true },
+    );
 
     return notification;
   } catch (err) {

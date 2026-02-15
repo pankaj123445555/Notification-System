@@ -1,5 +1,4 @@
 const express = require("express");
-const pool = require("./config/db");
 
 const cors = require("cors");
 const helmet = require("helmet");
