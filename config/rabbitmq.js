@@ -1,3 +1,4 @@
+// config/rabbitmq.js
 const amqp = require("amqplib");
 
 let channel;
@@ -8,35 +9,29 @@ async function connectRabbitMQ() {
     connection = await amqp.connect(process.env.RABBITMQ_URL);
 
     connection.on("error", (err) => {
-      console.error("RabbitMQ connection error:", err);
+      console.error("RabbitMQ error:", err);
     });
 
     connection.on("close", () => {
-      console.error("RabbitMQ connection closed. Reconnecting...");
-      setTimeout(connectRabbitMQ, 5000); // retry
+      console.error("RabbitMQ closed. Reconnecting...");
+      setTimeout(connectRabbitMQ, 5000);
     });
 
     channel = await connection.createChannel();
+    await channel.prefetch(1);
 
     await channel.assertQueue("email_queue", { durable: true });
 
-    console.log("✅ RabbitMQ connected");
-  } catch (error) {
-    console.error("❌ RabbitMQ connection failed:", error);
-    setTimeout(connectRabbitMQ, 5000); // retry after delay
+    console.log("RabbitMQ connected");
+  } catch (err) {
+    console.error("RabbitMQ connection failed:", err);
+    setTimeout(connectRabbitMQ, 5000);
   }
 }
 
 function getChannel() {
-  if (!channel) {
-    throw new Error("RabbitMQ not connected");
-  }
+  if (!channel) throw new Error("RabbitMQ not connected");
   return channel;
 }
 
-async function closeRabbitMQ() {
-  if (channel) await channel.close();
-  if (connection) await connection.close();
-}
-
-module.exports = { connectRabbitMQ, getChannel, closeRabbitMQ };
+module.exports = { connectRabbitMQ, getChannel };

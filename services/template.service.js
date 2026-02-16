@@ -1,6 +1,7 @@
-const pool = require("../config/db");
+const { getPool } = require("../config/db");
 
 getTemplate = async (applicationId, templateCode) => {
+  const pool = getPool();
   const result = await pool.query(
     `SELECT * FROM templates 
      WHERE application_id = $1 

@@ -12,16 +12,17 @@ async function connectDB() {
       database: process.env.DB_NAME,
     });
 
-    await pool.connect();
+    // await pool.connect();
 
-    console.log("✅ Connected to the databases");
+    console.log("Connected to the databases");
   } catch (error) {
-    console.error("❌ Database connection failed:", error);
+    console.error(" Database connection failed:", error);
     throw error;
   }
 }
 
 function getPool() {
+  console.log("Getting database pool...");
   if (!pool) {
     throw new Error("Database not initialized");
   }

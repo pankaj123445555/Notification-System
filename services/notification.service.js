@@ -1,4 +1,4 @@
-const pool = require("../config/db");
+const { getPool } = require("../config/db");
 const templateService = require("../services/template.service");
 const { getChannel } = require("../config/rabbitmq");
 
@@ -9,7 +9,7 @@ exports.createEmailNotification = async ({
   recipient,
   payload,
 }) => {
-  const client = await pool.connect();
+  const client = await getPool().connect();
 
   try {
     await client.query("BEGIN");

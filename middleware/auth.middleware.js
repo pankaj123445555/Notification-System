@@ -1,7 +1,8 @@
-const pool = require("../config/db");
+const { getPool } = require("../config/db");
 
 const authenticateApp = async (req, res, next) => {
   try {
+    const pool = getPool();
     const apiKey = req.headers["x-api-key"];
 
     console.log("Received API key:", apiKey, !apiKey);
