@@ -1,4 +1,3 @@
-// workers/email.worker.js
 require("dotenv").config();
 
 const { connectRabbitMQ, getChannel } = require("../config/rabbitmq");
@@ -9,8 +8,6 @@ async function startEmailWorker() {
   const pool = getPool();
   await connectRabbitMQ();
   const channel = getChannel();
-
-  console.log("📧 Email Worker started...");
 
   channel.consume("email_queue", async (msg) => {
     if (!msg) return;

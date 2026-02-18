@@ -12,8 +12,6 @@ async function connectDB() {
       database: process.env.DB_NAME,
     });
 
-    // await pool.connect();
-
     console.log("Connected to the databases");
   } catch (error) {
     console.error(" Database connection failed:", error);
