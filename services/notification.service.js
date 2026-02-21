@@ -20,6 +20,13 @@ exports.createEmailNotification = async ({
       template_code,
     );
 
+    const { subject, html, text } = templateService.renderEmail(
+      template,
+      payload,
+    );
+    console.log("Template fetched:", template);
+    console.log("Rendered Email:", { subject, html, text });
+
     // Insert notification
     const notificationResult = await client.query(
       `INSERT INTO notifications 
@@ -49,7 +56,9 @@ exports.createEmailNotification = async ({
         JSON.stringify({
           notification_id: notification.id,
           recipient,
-          payload,
+          subject,
+          html,
+          text,
         }),
       ),
       { persistent: true },
